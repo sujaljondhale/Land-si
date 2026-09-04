@@ -1,0 +1,25 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+@theme {
+  --color-primary: #2A7C13;
+  --color-secondary: #76C457;
+  --color-surface-1: #FFF8CF;
+  --color-surface-2: #FBE6C2;
+  --font-sans: "Noto Sans", ui-sans-serif, system-ui, sans-serif;
+  --radius-md: 0.625rem; /* 10px */
+  --radius-lg: 0.875rem; /* 14px */
+}
+
+@layer base {
+  :root {
+    font-family: var(--font-sans);
+  }
+  
+  body {
+    @apply bg-gray-50 text-gray-900 transition-colors duration-200;
+  }
+  
+  .dark body {
+    @apply bg-neutral-950 text-neutral-50;
+  }
+}
