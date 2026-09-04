@@ -1,9 +1,18 @@
 import { useState, useEffect } from 'react';
-import { Folder, Users, FileText, Plus, Search, MoreVertical, LayoutGrid, List } from 'lucide-react';
+import { Folder, Users, FileText, Plus, Search, MoreVertical, LayoutGrid, List, X, MousePointer2 } from 'lucide-react';
 import { Card, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { UploadModal } from '../components/repository/UploadModal';
+
+const MOCK_COLLABORATORS = [
+  { name: 'Dr. Ramesh Singh', email: 'ramesh.singh@gov.in', role: 'Admin', avatar: 'bg-blue-500' },
+  { name: 'Priya Sharma', email: 'psharma@niti.gov.in', role: 'Editor', avatar: 'bg-green-500' },
+  { name: 'Amit Patel', email: 'apatel@survey.gov.in', role: 'Editor', avatar: 'bg-yellow-500' },
+  { name: 'Sunita Devi', email: 'sunita.d@revenue.gov.in', role: 'Viewer', avatar: 'bg-purple-500' },
+  { name: 'Dr. K. R. Rao', email: 'krrao@iit.ac.in', role: 'Viewer', avatar: 'bg-red-500' },
+  { name: 'Sanjay Kumar', email: 'skumar@mohua.gov.in', role: 'Viewer', avatar: 'bg-indigo-500' }
+];
 
 export function Workspace() {
   const [workspaces, setWorkspaces] = useState<any[]>([]);
@@ -12,6 +21,7 @@ export function Workspace() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [isAccessModalOpen, setIsAccessModalOpen] = useState(false);
+  const [isEditorOpen, setIsEditorOpen] = useState(false);
 
   useEffect(() => {
     const fetchWorkspaces = async () => {
@@ -121,8 +131,10 @@ export function Workspace() {
                     
                     {/* Overlapping Avatar Stack */}
                     <div className="flex -space-x-2 overflow-hidden">
-                      {[...Array(Math.min(ws.collaborators, 3))].map((_, idx) => (
-                        <div key={idx} className="inline-block h-8 w-8 rounded-full ring-2 ring-white dark:ring-neutral-900 bg-gray-200 dark:bg-neutral-800 flex-shrink-0" />
+                      {MOCK_COLLABORATORS.slice(0, Math.min(ws.collaborators, 3)).map((collab, idx) => (
+                        <div key={idx} className={`inline-flex items-center justify-center h-8 w-8 rounded-full ring-2 ring-white dark:ring-neutral-900 ${collab.avatar} text-white font-bold text-xs flex-shrink-0`}>
+                          {collab.name.charAt(0)}
+                        </div>
                       ))}
                       {ws.collaborators > 3 && (
                         <div className="inline-flex h-8 w-8 items-center justify-center rounded-full ring-2 ring-white dark:ring-neutral-900 bg-gray-100 dark:bg-neutral-800 text-[10px] font-bold text-gray-600 dark:text-gray-300">
@@ -173,14 +185,16 @@ export function Workspace() {
                   </div>
                 </div>
                 <button onClick={() => setSelectedWs(null)} className="p-2 bg-gray-100 dark:bg-neutral-800 hover:bg-gray-200 dark:hover:bg-neutral-700 rounded-full transition-colors">
-                  <svg className="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                  <X className="w-5 h-5 text-gray-500" />
                 </button>
               </div>
 
               <div className="p-6 border-b border-gray-100 dark:border-neutral-800 bg-gray-50/50 dark:bg-neutral-900/50 flex justify-between items-center">
                 <div className="flex -space-x-2">
-                  {[...Array(Math.min(selectedWs.collaborators, 5))].map((_, idx) => (
-                    <div key={idx} className="inline-block h-10 w-10 rounded-full ring-2 ring-white dark:ring-neutral-900 bg-gray-200 dark:bg-neutral-700 flex-shrink-0" />
+                  {MOCK_COLLABORATORS.slice(0, Math.min(selectedWs.collaborators, 5)).map((collab, idx) => (
+                    <div key={idx} className={`inline-flex items-center justify-center h-10 w-10 rounded-full ring-2 ring-white dark:ring-neutral-900 ${collab.avatar} text-white font-bold text-sm flex-shrink-0`} title={collab.name}>
+                      {collab.name.charAt(0)}
+                    </div>
                   ))}
                   <div className="inline-flex h-10 w-10 items-center justify-center rounded-full ring-2 ring-white dark:ring-neutral-900 bg-gray-100 dark:bg-neutral-800 text-xs font-bold text-gray-600 dark:text-gray-300">
                     <Plus className="h-4 w-4" />
@@ -203,7 +217,12 @@ export function Workspace() {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       key={i} 
-                      onClick={() => { setSelectedWs(null); setViewDoc({ name: `Draft_Policy_V${i+1}.pdf`, details: `Added by Collab${i+1} • 2 days ago` }); }} 
+                      onClick={() => { 
+                        setViewDoc({ 
+                          name: i === 0 ? `Draft_MasterPlan_V2.pdf` : `Survey_Report_Zone_${i}.docx`, 
+                          details: `Added by ${MOCK_COLLABORATORS[i % MOCK_COLLABORATORS.length].name} • ${i+1} days ago` 
+                        }); 
+                      }} 
                       className="p-4 rounded-2xl border border-gray-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 flex items-center justify-between hover:border-primary/50 cursor-pointer shadow-sm"
                     >
                       <div className="flex items-center gap-3">
@@ -211,12 +230,12 @@ export function Workspace() {
                           <FileText className="h-5 w-5" />
                         </div>
                         <div>
-                          <p className="font-bold text-sm text-gray-900 dark:text-gray-100">Draft_Policy_V{i+1}.pdf</p>
-                          <p className="text-xs font-medium text-gray-500">Added by Collab{i+1} • 2 days ago</p>
+                          <p className="font-bold text-sm text-gray-900 dark:text-gray-100 truncate w-48">{i === 0 ? `Draft_MasterPlan_V2.pdf` : `Survey_Report_Zone_${i}.docx`}</p>
+                          <p className="text-xs font-medium text-gray-500">Added by {MOCK_COLLABORATORS[i % MOCK_COLLABORATORS.length].name}</p>
                         </div>
                       </div>
                       <span className="text-[10px] uppercase tracking-wider font-bold text-blue-600 bg-blue-50 dark:bg-blue-900/30 px-2 py-1 rounded border border-blue-100 dark:border-blue-800">
-                        Review
+                        {i === 0 ? 'Editing' : 'Review'}
                       </span>
                     </motion.div>
                   ))}
@@ -229,7 +248,7 @@ export function Workspace() {
 
       {/* Document View Modal */}
       <AnimatePresence>
-        {viewDoc && (
+        {viewDoc && !isEditorOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             <motion.div 
               initial={{ opacity: 0 }}
@@ -251,7 +270,7 @@ export function Workspace() {
                   <p className="text-sm font-medium text-gray-500">{viewDoc.details}</p>
                 </div>
                 <button onClick={() => setViewDoc(null)} className="p-2 bg-gray-100 dark:bg-neutral-800 hover:bg-gray-200 dark:hover:bg-neutral-700 rounded-full transition-colors">
-                  <svg className="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                  <X className="w-5 h-5 text-gray-500" />
                 </button>
               </div>
               <div className="flex-1 p-6 overflow-y-auto bg-gray-100 dark:bg-neutral-950">
@@ -264,7 +283,7 @@ export function Workspace() {
                     <p className="text-gray-500 dark:text-gray-400 mb-8 max-w-md text-lg leading-relaxed">
                       This is a collaborative draft document currently in the review phase. 
                     </p>
-                    <Button size="lg" className="rounded-full shadow-lg shadow-primary/20 px-8">
+                    <Button size="lg" className="rounded-full shadow-lg shadow-primary/20 px-8" onClick={() => setIsEditorOpen(true)}>
                       Open in Collaborative Editor
                     </Button>
                   </div>
@@ -272,6 +291,85 @@ export function Workspace() {
               </div>
             </motion.div>
           </div>
+        )}
+      </AnimatePresence>
+
+      {/* Full Screen Collaborative Editor Mock */}
+      <AnimatePresence>
+        {isEditorOpen && viewDoc && (
+          <motion.div 
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="fixed inset-0 z-[60] bg-gray-50 dark:bg-neutral-950 flex flex-col"
+          >
+            <div className="h-16 bg-white dark:bg-neutral-900 border-b border-gray-200 dark:border-neutral-800 px-4 flex items-center justify-between shrink-0">
+              <div className="flex items-center gap-4">
+                <button onClick={() => setIsEditorOpen(false)} className="p-2 hover:bg-gray-100 dark:hover:bg-neutral-800 rounded-lg">
+                  <X className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+                </button>
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 bg-blue-50 dark:bg-blue-900/20 text-blue-600 rounded-md">
+                    <FileText className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h2 className="font-bold text-gray-900 dark:text-white text-sm">{viewDoc.name}</h2>
+                    <p className="text-xs text-gray-500">Saved to cloud just now</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <div className="flex -space-x-2">
+                  <div className="inline-flex h-8 w-8 items-center justify-center rounded-full ring-2 ring-white dark:ring-neutral-900 bg-blue-500 text-white text-xs font-bold z-20" title="You">Y</div>
+                  <div className="inline-flex h-8 w-8 items-center justify-center rounded-full ring-2 ring-white dark:ring-neutral-900 bg-green-500 text-white text-xs font-bold z-10" title="Priya Sharma">P</div>
+                </div>
+                <Button size="sm" className="rounded-full shadow-md">Share</Button>
+              </div>
+            </div>
+
+            {/* Toolbar Dummy */}
+            <div className="h-12 bg-white dark:bg-neutral-900 border-b border-gray-200 dark:border-neutral-800 flex items-center px-4 gap-2 shrink-0 overflow-x-auto">
+              <select className="bg-gray-100 dark:bg-neutral-800 rounded text-sm px-2 py-1 outline-none dark:text-white">
+                <option>Normal text</option>
+                <option>Heading 1</option>
+              </select>
+              <div className="w-px h-6 bg-gray-200 dark:bg-neutral-700 mx-2"></div>
+              <select className="bg-gray-100 dark:bg-neutral-800 rounded text-sm px-2 py-1 outline-none dark:text-white">
+                <option>Inter</option>
+                <option>Arial</option>
+              </select>
+              <div className="w-px h-6 bg-gray-200 dark:bg-neutral-700 mx-2"></div>
+              <button className="p-1.5 hover:bg-gray-100 dark:hover:bg-neutral-800 rounded font-bold dark:text-white">B</button>
+              <button className="p-1.5 hover:bg-gray-100 dark:hover:bg-neutral-800 rounded italic dark:text-white">I</button>
+              <button className="p-1.5 hover:bg-gray-100 dark:hover:bg-neutral-800 rounded underline dark:text-white">U</button>
+            </div>
+
+            {/* Editor Canvas */}
+            <div className="flex-1 overflow-auto p-8 flex justify-center bg-gray-100 dark:bg-neutral-950">
+              <div className="w-full max-w-[800px] min-h-[1056px] bg-white dark:bg-neutral-900 shadow-lg border border-gray-200 dark:border-neutral-800 p-16 outline-none">
+                <h1 className="text-4xl font-bold mb-6 dark:text-white">Urban Planning 2025: Draft Master Plan</h1>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4 text-lg">
+                  This document outlines the proposed zoning changes for the expansion of municipal boundaries into adjacent agricultural transition zones.
+                </p>
+                <div className="relative inline-block mt-4">
+                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg bg-green-50 dark:bg-green-900/20">
+                    The primary objective is to balance rapid urban growth with sustainable agricultural practices...
+                  </p>
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ repeat: Infinity, repeatType: "reverse", duration: 1 }}
+                    className="absolute -right-3 -top-3 z-10"
+                  >
+                    <MousePointer2 className="h-4 w-4 text-green-500 fill-green-500 -rotate-12" />
+                    <div className="bg-green-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded shadow-sm whitespace-nowrap mt-1">Priya Sharma</div>
+                  </motion.div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
 
@@ -300,7 +398,7 @@ export function Workspace() {
               <div className="p-6 border-b border-gray-100 dark:border-neutral-800 flex justify-between items-center bg-gray-50/50 dark:bg-neutral-900/50">
                 <h2 className="text-xl font-bold dark:text-gray-100">Manage Access</h2>
                 <button onClick={() => setIsAccessModalOpen(false)} className="p-2 bg-gray-100 dark:bg-neutral-800 hover:bg-gray-200 dark:hover:bg-neutral-700 rounded-full transition-colors">
-                  <svg className="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                  <X className="w-5 h-5 text-gray-500" />
                 </button>
               </div>
               <div className="p-6">
@@ -308,21 +406,26 @@ export function Workspace() {
                   <input type="email" placeholder="Invite via email..." className="flex-1 bg-gray-50 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary/50 outline-none dark:text-white" />
                   <Button>Invite</Button>
                 </div>
-                <div className="space-y-4 max-h-[40vh] overflow-y-auto">
+                <div className="space-y-4 max-h-[50vh] overflow-y-auto pr-2">
                   <h3 className="text-sm font-bold text-gray-500 uppercase">Current Members ({selectedWs.collaborators})</h3>
-                  {[...Array(selectedWs.collaborators)].map((_, i) => (
+                  {MOCK_COLLABORATORS.slice(0, selectedWs.collaborators).map((collab, i) => (
                     <div key={i} className="flex justify-between items-center">
                       <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 bg-gray-200 dark:bg-neutral-700 rounded-full"></div>
+                        <div className={`h-10 w-10 ${collab.avatar} rounded-full flex items-center justify-center text-white font-bold`}>
+                          {collab.name.charAt(0)}
+                        </div>
                         <div>
-                          <p className="font-bold text-gray-900 dark:text-white text-sm">Collaborator {i+1}</p>
-                          <p className="text-xs text-gray-500">collab{i+1}@gov.in</p>
+                          <p className="font-bold text-gray-900 dark:text-white text-sm">{collab.name}</p>
+                          <p className="text-xs text-gray-500">{collab.email}</p>
                         </div>
                       </div>
-                      <select className="bg-gray-50 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-md text-sm px-2 py-1 outline-none dark:text-white">
+                      <select 
+                        className="bg-gray-50 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-md text-sm px-2 py-1 outline-none dark:text-white"
+                        defaultValue={collab.role}
+                      >
+                        <option>Admin</option>
                         <option>Editor</option>
                         <option>Viewer</option>
-                        <option>Admin</option>
                       </select>
                     </div>
                   ))}
