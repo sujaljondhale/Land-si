@@ -234,7 +234,7 @@ function ResearchDashboard() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="border-l-4 border-l-[#2A7C13]">
+        <Card className="border-l-4 border-l-[#2A7C13] hover:shadow-md cursor-pointer transition-all hover:scale-[1.02]" onClick={() => window.location.href = '/repository'}>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -246,7 +246,7 @@ function ResearchDashboard() {
           </CardContent>
         </Card>
         
-        <Card className="border-l-4 border-l-blue-500">
+        <Card className="border-l-4 border-l-blue-500 hover:shadow-md cursor-pointer transition-all hover:scale-[1.02]" onClick={() => window.location.href = '/workspace'}>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -258,7 +258,7 @@ function ResearchDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-[#76C457]">
+        <Card className="border-l-4 border-l-[#76C457] hover:shadow-md cursor-pointer transition-all hover:scale-[1.02]" onClick={() => window.location.href = '/repository'}>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -270,7 +270,7 @@ function ResearchDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-yellow-500">
+        <Card className="border-l-4 border-l-yellow-500 hover:shadow-md cursor-pointer transition-all hover:scale-[1.02]" onClick={() => window.location.href = '/workspace'}>
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
