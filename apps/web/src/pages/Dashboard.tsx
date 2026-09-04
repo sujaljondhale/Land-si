@@ -4,6 +4,7 @@ import { Users, FileText, AlertTriangle, CheckCircle2, BookOpen, Share2, Downloa
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
 import { useAuth } from '../lib/auth/AuthContext';
 import { Button } from '../components/ui/Button';
+import { DownloadButton } from '../components/ui/DownloadButton';
 import { useTheme } from '../lib/theme/ThemeContext';
 
 const COLORS = ['#2A7C13', '#76C457', '#FBE6C2', '#e5e7eb'];
@@ -107,18 +108,7 @@ function AdminDashboard({ data, user }: { data: any, user: any }) {
           >
             Seed Live Govt Data
           </Button>
-          <button 
-            onClick={() => window.print()}
-            className="group relative inline-flex h-10 items-center justify-center overflow-hidden rounded-xl border border-gray-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-6 font-medium text-gray-700 dark:text-gray-200 shadow-sm transition-all hover:border-primary hover:bg-primary/5 active:scale-95"
-          >
-            <div className="absolute inset-0 flex h-full w-full justify-center [transform:skew(-12deg)_translateX(-150%)] group-hover:duration-1000 group-hover:[transform:skew(-12deg)_translateX(150%)]">
-              <div className="relative h-full w-8 bg-white/20 dark:bg-white/10" />
-            </div>
-            <span className="flex items-center gap-2 relative z-10 transition-colors group-hover:text-primary">
-              <Download className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:scale-110" />
-              Download PDF
-            </span>
-          </button>
+          <DownloadButton onClick={() => window.print()} className="print:hidden" />
         </div>
       </div>
 
@@ -240,10 +230,7 @@ function ResearchDashboard() {
           <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Research & Academia</h1>
           <p className="text-gray-500 dark:text-gray-400">Welcome to your academic portal</p>
         </div>
-        <Button onClick={() => window.print()} variant="outline" className="print:hidden">
-          <Download className="h-4 w-4 mr-2" />
-          Download PDF
-        </Button>
+        <DownloadButton onClick={() => window.print()} className="print:hidden" />
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -340,10 +327,7 @@ function PublicDashboard() {
           <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Citizen Portal</h1>
           <p className="text-gray-500 dark:text-gray-400">Manage your grievances and local alerts</p>
         </div>
-        <Button onClick={() => window.print()} variant="outline" className="print:hidden">
-          <Download className="h-4 w-4 mr-2" />
-          Download PDF
-        </Button>
+        <DownloadButton onClick={() => window.print()} className="print:hidden" />
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

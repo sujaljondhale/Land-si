@@ -2,6 +2,7 @@ import { Map, LayoutDashboard, Search, FileText, Settings, User, Folder, Activit
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '../../lib/utils';
 import { useAuth } from '../../lib/auth/AuthContext';
+import { motion } from 'framer-motion';
 
 export function Sidebar() {
   const { user } = useAuth();
@@ -21,42 +22,64 @@ export function Sidebar() {
   ];
 
   return (
-    <aside className="w-64 bg-white dark:bg-neutral-900 border-r dark:border-neutral-800 flex-shrink-0 hidden md:flex flex-col transition-colors print:hidden">
-      <div className="h-16 flex items-center px-6 border-b border-gray-100 dark:border-neutral-800">
-        <h1 className="font-bold text-[#2A7C13] dark:text-[#76C457] text-lg truncate">LandGov Platform</h1>
+    <aside className="w-64 bg-white dark:bg-neutral-900 border-r border-gray-100 dark:border-neutral-800 flex-shrink-0 hidden md:flex flex-col transition-colors print:hidden shadow-[4px_0_24px_rgba(0,0,0,0.02)] dark:shadow-none z-10">
+      <div className="h-20 flex items-center px-8 border-b border-gray-100 dark:border-neutral-800">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+            <Map className="w-4 h-4 text-primary" />
+          </div>
+          <h1 className="font-extrabold text-gray-900 dark:text-white tracking-tight text-lg truncate">Land-si</h1>
+        </div>
       </div>
-      <div className="flex-1 overflow-y-auto py-4">
-        <nav className="space-y-1 px-3">
+      <div className="flex-1 overflow-y-auto py-6">
+        <nav className="space-y-1.5 px-4">
           {navItems
             .filter(item => user && item.roles.includes(user.role))
             .map((item, i) => {
               const isActive = location.pathname === item.href;
               return (
                 <Link
-                  key={i}
+                  key={item.href}
                   to={item.href}
-                  className={cn(
-                    "flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors",
-                    isActive
-                      ? "bg-[#FFF8CF] dark:bg-[#2A7C13]/20 text-[#2A7C13] dark:text-[#76C457]" 
-                      : "text-gray-700 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-neutral-800/50 hover:text-gray-900 dark:hover:text-gray-200"
-                  )}
+                  className="relative flex items-center px-4 py-2.5 text-sm font-medium rounded-xl transition-colors group"
                 >
-                  <item.icon className={cn("mr-3 h-5 w-5 transition-colors", isActive ? "text-[#2A7C13] dark:text-[#76C457]" : "text-gray-400 dark:text-gray-500")} />
-                  {item.label}
+                  {isActive && (
+                    <motion.div
+                      layoutId="sidebar-active-pill"
+                      className="absolute inset-0 bg-primary/10 dark:bg-primary/20 rounded-xl"
+                      initial={false}
+                      transition={{
+                        type: "spring",
+                        stiffness: 500,
+                        damping: 35
+                      }}
+                    />
+                  )}
+                  <item.icon 
+                    className={cn(
+                      "mr-3 h-5 w-5 transition-colors relative z-10", 
+                      isActive ? "text-primary" : "text-gray-400 group-hover:text-gray-600 dark:text-gray-500 dark:group-hover:text-gray-300"
+                    )} 
+                  />
+                  <span className={cn(
+                    "relative z-10 transition-colors",
+                    isActive ? "text-primary font-bold" : "text-gray-600 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-gray-200"
+                  )}>
+                    {item.label}
+                  </span>
                 </Link>
               );
             })}
         </nav>
       </div>
-      <div className="p-4 border-t border-gray-100 dark:border-neutral-800 hover:bg-gray-50 dark:hover:bg-neutral-800/50 transition-colors">
+      <div className="p-4 border-t border-gray-100 dark:border-neutral-800 m-4 rounded-2xl bg-gray-50 dark:bg-neutral-800/50 hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer">
         <Link to="/profile" className="flex items-center w-full">
-          <div className="bg-[#76C457] dark:bg-[#2A7C13] text-white rounded-full p-2 flex-shrink-0">
-            <User className="h-4 w-4" />
+          <div className="bg-primary/10 text-primary rounded-xl p-2.5 flex-shrink-0">
+            <User className="h-5 w-5" />
           </div>
           <div className="ml-3 truncate">
-            <p className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate">{user?.name || 'Guest'}</p>
-            <p className="text-xs text-gray-500 dark:text-gray-500 capitalize">{user?.role || 'Public'}</p>
+            <p className="text-sm font-bold text-gray-900 dark:text-gray-100 truncate">{user?.name || 'Guest'}</p>
+            <p className="text-xs font-medium text-gray-500 dark:text-gray-400 capitalize">{user?.role || 'Public'}</p>
           </div>
         </Link>
       </div>
