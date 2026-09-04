@@ -82,27 +82,51 @@ export function InnovationPortal() {
                   <p className="text-gray-500">Your application for "{selectedChallenge}" has been sent to the review committee.</p>
                 </div>
               ) : (
-                <div className="space-y-4">
+                <form id="innovation-form" className="space-y-4" onSubmit={async (e) => {
+                  e.preventDefault();
+                  const form = e.target as HTMLFormElement;
+                  const title = (form.elements.namedItem('title') as HTMLInputElement).value;
+                  const abstract = (form.elements.namedItem('abstract') as HTMLTextAreaElement).value;
+                  
+                  try {
+                    const token = JSON.parse(localStorage.getItem('mockUser') || '{}')?.token;
+                    const res = await fetch('http://localhost:3000/public/innovation', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                      },
+                      body: JSON.stringify({ challenge: selectedChallenge, title, abstract })
+                    });
+                    if (res.ok) {
+                      setSubmitted(true);
+                    } else {
+                      alert('Failed to submit proposal.');
+                    }
+                  } catch (err) {
+                    alert('Network error while submitting.');
+                  }
+                }}>
                   <p className="text-sm font-medium text-gray-700">Challenge: <span className="text-[#2A7C13]">{selectedChallenge}</span></p>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Project Title</label>
-                    <input type="text" className="w-full border-gray-300 rounded-md shadow-sm border p-2" placeholder="Enter your project title..." />
+                    <input name="title" required type="text" className="w-full border-gray-300 rounded-md shadow-sm border p-2" placeholder="Enter your project title..." />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Proposal Pitch (Abstract)</label>
-                    <textarea rows={4} className="w-full border-gray-300 rounded-md shadow-sm border p-2" placeholder="Briefly describe your solution..."></textarea>
+                    <textarea name="abstract" required rows={4} className="w-full border-gray-300 rounded-md shadow-sm border p-2" placeholder="Briefly describe your solution..."></textarea>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Upload Full Proposal (PDF)</label>
                     <input type="file" className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100" />
                   </div>
-                </div>
+                </form>
               )}
             </div>
             {!submitted && (
               <div className="p-4 border-t bg-gray-50 flex justify-end gap-2">
                 <Button variant="outline" onClick={() => setSelectedChallenge(null)}>Cancel</Button>
-                <Button onClick={() => setSubmitted(true)}>Submit Application</Button>
+                <Button type="submit" form="innovation-form">Submit Application</Button>
               </div>
             )}
           </div>

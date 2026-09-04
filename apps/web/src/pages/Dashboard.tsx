@@ -91,10 +91,27 @@ function AdminDashboard({ data, user }: { data: any, user: any }) {
           <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Analytics Overview</h1>
           <p className="text-gray-500 dark:text-gray-400 capitalize">{user?.role} Dashboard</p>
         </div>
-        <Button onClick={() => window.print()} variant="outline" className="print:hidden">
-          <Download className="h-4 w-4 mr-2" />
-          Download PDF
-        </Button>
+        <div className="flex gap-2 print:hidden">
+          <Button 
+            onClick={async () => {
+              try {
+                const res = await fetch('http://localhost:3000/admin/seed', { method: 'POST' });
+                if (res.ok) alert('Successfully seeded platform with live government data!');
+                else alert('Failed to seed data.');
+                window.location.reload();
+              } catch (e) {
+                alert('Error seeding data.');
+              }
+            }} 
+            className="bg-[#2A7C13] hover:bg-[#1f5c0e] text-white"
+          >
+            Seed Live Govt Data
+          </Button>
+          <Button onClick={() => window.print()} variant="outline">
+            <Download className="h-4 w-4 mr-2" />
+            Download PDF
+          </Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

@@ -61,11 +61,8 @@ export const getFeatures = async (req: Request, res: Response): Promise<void> =>
     
     if (!dbSuccess) {
       if (layerId === 'l2') {
-        // Mock dispute points (New Delhi area)
-        features.features = [
-          { type: 'Feature', geometry: { type: 'Point', coordinates: [77.2090, 28.6139] }, properties: { type: 'Dispute', severity: 'High' } },
-          { type: 'Feature', geometry: { type: 'Point', coordinates: [77.2200, 28.6200] }, properties: { type: 'Dispute', severity: 'Medium' } }
-        ];
+        // Will be populated below
+        features.features = [];
       } else {
         // Mock polygon for land use
         features.features = [
@@ -79,6 +76,19 @@ export const getFeatures = async (req: Request, res: Response): Promise<void> =>
           }
         ];
       }
+    }
+
+    // Always merge in live global grievances for the dispute layer
+    if (layerId === 'l2') {
+      const { globalGrievances } = require('./publicController');
+      const liveFeatures = globalGrievances.map((g: any) => ({
+        type: 'Feature',
+        geometry: { type: 'Point', coordinates: [g.lng, g.lat] },
+        properties: { type: g.category, severity: g.status === 'pending' ? 'High' : 'Low', id: g.id }
+      }));
+      
+      // Combine db features with live features (deduplicate by id if necessary, but simple concat is fine for MVP)
+      features.features = [...features.features, ...liveFeatures];
     }
 
     res.json({

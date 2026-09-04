@@ -45,12 +45,28 @@ export const submitGrievance = async (req: Request, res: Response): Promise<void
   }
 };
 
+export const globalProposals: any[] = [];
+
 export const submitInnovation = async (req: Request, res: Response): Promise<void> => {
   try {
+    const { challenge, title, abstract } = req.body;
+    
+    const newProposal = {
+      id: `proposal-${Date.now()}`,
+      challenge,
+      title,
+      abstract,
+      status: 'under_review',
+      date: new Date().toISOString(),
+      applicant: (req as any).user?.email || 'researcher@example.com'
+    };
+    
+    globalProposals.unshift(newProposal);
+
     res.json({
       data: {
-        id: `proposal-${Date.now()}`,
-        status: 'under_review',
+        id: newProposal.id,
+        status: newProposal.status,
         message: 'Proposal submitted successfully.'
       },
       requestId: req.headers['x-request-id']
