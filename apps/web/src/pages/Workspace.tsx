@@ -3,12 +3,15 @@ import { Folder, Users, FileText, Plus, Search, MoreVertical, LayoutGrid, List }
 import { Card, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { motion, AnimatePresence } from 'framer-motion';
+import { UploadModal } from '../components/repository/UploadModal';
 
 export function Workspace() {
   const [workspaces, setWorkspaces] = useState<any[]>([]);
   const [selectedWs, setSelectedWs] = useState<any>(null);
   const [viewDoc, setViewDoc] = useState<any>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const [isAccessModalOpen, setIsAccessModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchWorkspaces = async () => {
@@ -183,13 +186,13 @@ export function Workspace() {
                     <Plus className="h-4 w-4" />
                   </div>
                 </div>
-                <Button variant="outline" size="sm" className="rounded-full font-medium">Manage Access</Button>
+                <Button variant="outline" size="sm" className="rounded-full font-medium" onClick={() => setIsAccessModalOpen(true)}>Manage Access</Button>
               </div>
               
               <div className="flex-1 overflow-y-auto p-6 space-y-6">
                 <div className="flex justify-between items-center">
                   <h3 className="font-bold text-gray-900 dark:text-white text-lg">Documents</h3>
-                  <Button size="sm" className="rounded-full shadow-md shadow-primary/20">
+                  <Button size="sm" className="rounded-full shadow-md shadow-primary/20" onClick={() => setIsUploadModalOpen(true)}>
                     <Plus className="h-4 w-4 mr-1" /> Add
                   </Button>
                 </div>
@@ -265,6 +268,64 @@ export function Workspace() {
                       Open in Collaborative Editor
                     </Button>
                   </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      <UploadModal 
+        isOpen={isUploadModalOpen} 
+        onClose={() => setIsUploadModalOpen(false)} 
+        onUploadSuccess={() => setIsUploadModalOpen(false)}
+      />
+
+      <AnimatePresence>
+        {isAccessModalOpen && selectedWs && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              onClick={() => setIsAccessModalOpen(false)}
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-lg bg-white dark:bg-neutral-900 rounded-3xl shadow-2xl overflow-hidden flex flex-col border border-gray-100 dark:border-neutral-800"
+            >
+              <div className="p-6 border-b border-gray-100 dark:border-neutral-800 flex justify-between items-center bg-gray-50/50 dark:bg-neutral-900/50">
+                <h2 className="text-xl font-bold dark:text-gray-100">Manage Access</h2>
+                <button onClick={() => setIsAccessModalOpen(false)} className="p-2 bg-gray-100 dark:bg-neutral-800 hover:bg-gray-200 dark:hover:bg-neutral-700 rounded-full transition-colors">
+                  <svg className="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              </div>
+              <div className="p-6">
+                <div className="flex gap-2 mb-6">
+                  <input type="email" placeholder="Invite via email..." className="flex-1 bg-gray-50 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary/50 outline-none dark:text-white" />
+                  <Button>Invite</Button>
+                </div>
+                <div className="space-y-4 max-h-[40vh] overflow-y-auto">
+                  <h3 className="text-sm font-bold text-gray-500 uppercase">Current Members ({selectedWs.collaborators})</h3>
+                  {[...Array(selectedWs.collaborators)].map((_, i) => (
+                    <div key={i} className="flex justify-between items-center">
+                      <div className="flex items-center gap-3">
+                        <div className="h-10 w-10 bg-gray-200 dark:bg-neutral-700 rounded-full"></div>
+                        <div>
+                          <p className="font-bold text-gray-900 dark:text-white text-sm">Collaborator {i+1}</p>
+                          <p className="text-xs text-gray-500">collab{i+1}@gov.in</p>
+                        </div>
+                      </div>
+                      <select className="bg-gray-50 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-md text-sm px-2 py-1 outline-none dark:text-white">
+                        <option>Editor</option>
+                        <option>Viewer</option>
+                        <option>Admin</option>
+                      </select>
+                    </div>
+                  ))}
                 </div>
               </div>
             </motion.div>
