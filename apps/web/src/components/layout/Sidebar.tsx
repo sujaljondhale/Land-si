@@ -21,7 +21,7 @@ export function Sidebar() {
   ];
 
   return (
-    <aside className="w-64 bg-white dark:bg-neutral-900 border-r dark:border-neutral-800 flex-shrink-0 hidden md:flex flex-col transition-colors">
+    <aside className="w-64 bg-white dark:bg-neutral-900 border-r dark:border-neutral-800 flex-shrink-0 hidden md:flex flex-col transition-colors print:hidden">
       <div className="h-16 flex items-center px-6 border-b border-gray-100 dark:border-neutral-800">
         <h1 className="font-bold text-[#2A7C13] dark:text-[#76C457] text-lg truncate">LandGov Platform</h1>
       </div>
@@ -49,16 +49,16 @@ export function Sidebar() {
             })}
         </nav>
       </div>
-      <div className="p-4 border-t border-gray-100 dark:border-neutral-800">
-        <div className="flex items-center">
-          <div className="bg-[#76C457] dark:bg-[#2A7C13] text-white rounded-full p-2">
+      <div className="p-4 border-t border-gray-100 dark:border-neutral-800 hover:bg-gray-50 dark:hover:bg-neutral-800/50 transition-colors">
+        <Link to="/profile" className="flex items-center w-full">
+          <div className="bg-[#76C457] dark:bg-[#2A7C13] text-white rounded-full p-2 flex-shrink-0">
             <User className="h-4 w-4" />
           </div>
-          <div className="ml-3">
-            <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{user?.name || 'Guest'}</p>
+          <div className="ml-3 truncate">
+            <p className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate">{user?.name || 'Guest'}</p>
             <p className="text-xs text-gray-500 dark:text-gray-500 capitalize">{user?.role || 'Public'}</p>
           </div>
-        </div>
+        </Link>
       </div>
     </aside>
   );

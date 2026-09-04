@@ -38,7 +38,7 @@ export function Header() {
   };
 
   return (
-    <header className="h-16 border-b bg-white dark:bg-neutral-900 dark:border-neutral-800 flex items-center justify-between px-4 sm:px-6 lg:px-8 relative z-50 transition-colors">
+    <header className="h-16 border-b bg-white dark:bg-neutral-900 dark:border-neutral-800 flex items-center justify-between px-4 sm:px-6 lg:px-8 relative z-50 transition-colors print:hidden">
       <div className="flex items-center">
         <button className="md:hidden p-2 -ml-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
           <Menu className="h-6 w-6" />

@@ -86,9 +86,15 @@ function AdminDashboard({ data, user }: { data: any, user: any }) {
   
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Analytics Overview</h1>
-        <p className="text-gray-500 dark:text-gray-400 capitalize">{user?.role} Dashboard</p>
+      <div className="flex justify-between items-start">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Analytics Overview</h1>
+          <p className="text-gray-500 dark:text-gray-400 capitalize">{user?.role} Dashboard</p>
+        </div>
+        <Button onClick={() => window.print()} variant="outline" className="print:hidden">
+          <Download className="h-4 w-4 mr-2" />
+          Download PDF
+        </Button>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -204,9 +210,15 @@ function AdminDashboard({ data, user }: { data: any, user: any }) {
 function ResearchDashboard() {
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Research & Academia</h1>
-        <p className="text-gray-500 dark:text-gray-400">Welcome to your academic portal</p>
+      <div className="flex justify-between items-start">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Research & Academia</h1>
+          <p className="text-gray-500 dark:text-gray-400">Welcome to your academic portal</p>
+        </div>
+        <Button onClick={() => window.print()} variant="outline" className="print:hidden">
+          <Download className="h-4 w-4 mr-2" />
+          Download PDF
+        </Button>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -298,9 +310,15 @@ function ResearchDashboard() {
 function PublicDashboard() {
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Citizen Portal</h1>
-        <p className="text-gray-500 dark:text-gray-400">Manage your grievances and local alerts</p>
+      <div className="flex justify-between items-start">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Citizen Portal</h1>
+          <p className="text-gray-500 dark:text-gray-400">Manage your grievances and local alerts</p>
+        </div>
+        <Button onClick={() => window.print()} variant="outline" className="print:hidden">
+          <Download className="h-4 w-4 mr-2" />
+          Download PDF
+        </Button>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

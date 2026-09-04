@@ -11,6 +11,7 @@ import { Simulator } from './pages/Simulator';
 import { GrievanceForm } from './pages/GrievanceForm';
 import { GrievanceInbox } from './pages/GrievanceInbox';
 import { InnovationPortal } from './pages/InnovationPortal';
+import { Profile } from './pages/Profile';
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -32,6 +33,7 @@ function App() {
         <Route path="/grievance" element={<GrievanceForm />} />
         <Route path="/inbox" element={<GrievanceInbox />} />
         <Route path="/innovation" element={<InnovationPortal />} />
+        <Route path="/profile" element={<Profile />} />
       </Route>
     </Routes>
   );
