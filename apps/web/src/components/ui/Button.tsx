@@ -13,15 +13,15 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         className={cn(
-          'inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-white',
+          'inline-flex items-center justify-center font-semibold tracking-wide transition-all duration-300 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/20 disabled:opacity-50 disabled:pointer-events-none',
           {
-            'bg-[#2A7C13] text-white hover:bg-[#2A7C13]/90': variant === 'primary',
-            'bg-[#76C457] text-white hover:bg-[#76C457]/90': variant === 'secondary',
-            'border border-[#2A7C13] dark:border-[#76C457] text-[#2A7C13] dark:text-[#76C457] hover:bg-[#FFF8CF] dark:hover:bg-[#2A7C13]/20': variant === 'outline',
-            'hover:bg-gray-100 dark:hover:bg-neutral-800 text-gray-700 dark:text-gray-300': variant === 'ghost',
-            'h-9 px-3 text-sm': size === 'sm',
-            'h-10 py-2 px-4': size === 'md',
-            'h-11 px-8 text-lg': size === 'lg',
+            'bg-primary hover:bg-[#1f5c0e] text-white shadow-lg shadow-primary/20 border-transparent': variant === 'primary',
+            'bg-[#76C457] hover:bg-[#5da341] text-white shadow-lg shadow-[#76C457]/20 border-transparent': variant === 'secondary',
+            'border-2 border-gray-200 dark:border-neutral-800 text-gray-700 dark:text-gray-300 hover:border-primary dark:hover:border-primary hover:text-primary dark:hover:text-primary hover:bg-primary/5 dark:hover:bg-primary/10 bg-white dark:bg-neutral-900': variant === 'outline',
+            'hover:bg-gray-100 dark:hover:bg-neutral-800 text-gray-700 dark:text-gray-300 bg-transparent': variant === 'ghost',
+            'h-9 px-4 text-sm rounded-lg': size === 'sm',
+            'h-11 px-6 text-[15px] rounded-xl': size === 'md',
+            'h-14 px-8 text-[16px] rounded-2xl': size === 'lg',
           },
           className
         )}
