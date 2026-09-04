@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Bell, Menu, FileText, AlertTriangle, Moon, Sun } from 'lucide-react';
+import { Bell, Menu, FileText, AlertTriangle, Moon, Sun, Search } from 'lucide-react';
 import { useAuth } from '../../lib/auth/AuthContext';
 import { useTheme } from '../../lib/theme/ThemeContext';
 import { Button } from '../ui/Button';
@@ -39,11 +39,29 @@ export function Header() {
 
   return (
     <header className="h-16 border-b bg-white dark:bg-neutral-900 dark:border-neutral-800 flex items-center justify-between px-4 sm:px-6 lg:px-8 relative z-50 transition-colors print:hidden">
-      <div className="flex items-center">
+      <div className="flex items-center space-x-4">
         <button className="md:hidden p-2 -ml-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
           <Menu className="h-6 w-6" />
         </button>
+        
+        {/* Animated Search Bar */}
+        <div className="relative group hidden sm:block">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
+            <Search className="h-4 w-4 text-gray-400 group-focus-within:text-primary transition-colors duration-300" />
+          </div>
+          <input
+            type="text"
+            placeholder="Search documents, disputes..."
+            className="block w-48 focus:w-80 transition-all duration-300 ease-out pl-10 pr-3 py-2 border border-gray-200 dark:border-neutral-700 rounded-full leading-5 bg-gray-50 dark:bg-neutral-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary focus:bg-white dark:focus:bg-neutral-900 sm:text-sm shadow-sm"
+          />
+          <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none opacity-0 group-focus-within:opacity-100 transition-opacity duration-300 z-10">
+            <kbd className="inline-flex items-center border border-gray-200 dark:border-neutral-700 rounded px-2 text-xs font-sans font-medium text-gray-400 dark:text-gray-500">
+              ⌘K
+            </kbd>
+          </div>
+        </div>
       </div>
+      
       <div className="flex items-center space-x-4">
         <button 
           onClick={toggleTheme}
