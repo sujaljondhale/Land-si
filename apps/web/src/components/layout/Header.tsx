@@ -138,9 +138,6 @@ export function Header() {
         </div>
         
         <div className="flex items-center space-x-2 border-l dark:border-neutral-700 pl-4">
-          <span className="text-sm font-medium text-gray-700 dark:text-gray-300 hidden sm:block">
-            {user?.name}
-          </span>
           <Button variant="ghost" size="sm" onClick={logout}>
             Logout
           </Button>
