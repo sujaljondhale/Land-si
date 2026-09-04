@@ -91,7 +91,7 @@ function AdminDashboard({ data, user }: { data: any, user: any }) {
           <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Analytics Overview</h1>
           <p className="text-gray-500 dark:text-gray-400 capitalize">{user?.role} Dashboard</p>
         </div>
-        <div className="flex gap-2 print:hidden">
+        <div className="flex gap-3 print:hidden">
           <Button 
             onClick={async () => {
               try {
@@ -103,14 +103,22 @@ function AdminDashboard({ data, user }: { data: any, user: any }) {
                 alert('Error seeding data.');
               }
             }} 
-            className="bg-[#2A7C13] hover:bg-[#1f5c0e] text-white"
+            className="h-10 px-4 rounded-xl bg-primary hover:bg-[#1f5c0e] text-white shadow-md shadow-primary/20 transition-all font-medium text-sm"
           >
             Seed Live Govt Data
           </Button>
-          <Button onClick={() => window.print()} variant="outline">
-            <Download className="h-4 w-4 mr-2" />
-            Download PDF
-          </Button>
+          <button 
+            onClick={() => window.print()}
+            className="group relative inline-flex h-10 items-center justify-center overflow-hidden rounded-xl border border-gray-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-6 font-medium text-gray-700 dark:text-gray-200 shadow-sm transition-all hover:border-primary hover:bg-primary/5 active:scale-95"
+          >
+            <div className="absolute inset-0 flex h-full w-full justify-center [transform:skew(-12deg)_translateX(-150%)] group-hover:duration-1000 group-hover:[transform:skew(-12deg)_translateX(150%)]">
+              <div className="relative h-full w-8 bg-white/20 dark:bg-white/10" />
+            </div>
+            <span className="flex items-center gap-2 relative z-10 transition-colors group-hover:text-primary">
+              <Download className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:scale-110" />
+              Download PDF
+            </span>
+          </button>
         </div>
       </div>
 
